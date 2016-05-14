@@ -1,0 +1,33 @@
+- name: Deploy stack parameters template
+  template:
+    src=stack_parameters.j2
+    dest="{{ inventory_dir }}/files/stack_parameters"
+
+- name: Deploy stack
+  heat_stack:
+    stack_name: "{{ prefix }}stack"
+    state: present
+    login_username: "{{ username }}"
+    login_password: "{{ password }}"
+    auth_url: "{{ auth_url }}"
+    tenant_name: "{{ tenant_name }}"
+    template: "{{ inventory_dir}}/heat_templates/ovb.yaml"
+    environment_files: 
+      - "{{ inventory_dir }}/heat_templates/resource-registry.yaml"
+      -  "{{ inventory_dir }}/files/stack_parameters"
+  register: stack_deployment
+  ignore_errors: true
+
+- name: Show stack deployment information
+  shell: >
+    export OS_USERNAME="{{ username }}";
+    export OS_PASSWORD="{{ password }}";
+    export OS_TENANT_NAME="{{ tenant_name }}";
+    export OS_AUTH_URL="{{ auth_url }}";
+    heat stack-show "{{ prefix }}stack"
+  when: stack_deployment.result is not defined
+
+- name: set fact for undercloud floating IP address
+  set_fact: 
+    floating_ip="{{ stack_deployment.stack.outputs[0].output_value }}"
+
