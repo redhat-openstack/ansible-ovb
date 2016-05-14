@@ -1,0 +1,12 @@
+- name: Copy instackenv.json to undercloud
+  copy:
+    src="{{ inventory_dir }}/files/instackenv.json"
+    dest="/root/instackenv.json"
+
+- name: Set MTU values
+  shell: >
+    ip link set {{ item }} mtu {{ provisioner.network.os_net_config.interface.mtu }};
+    echo "MTU={{ provisioner.network.os_net_config.interface.mtu }}" >> /etc/sysconfig/network-scripts/ifcfg-{{ item }}
+  with_items:
+    - 'eth1'
+    - 'eth2'

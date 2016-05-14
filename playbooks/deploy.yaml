@@ -3,3 +3,10 @@
   roles:
     - { role: deploy_stack }
     - { role: setup_connection }
+
+- name: Setup Undercloud
+  hosts: undercloud
+  vars:
+      ansible_ssh_user: root
+  roles:
+    - { role: setup_undercloud }

@@ -11,9 +11,10 @@
     ansible_ssh_private_key_file="{{ key_name }}"
 
 - name: Wait for undercloud to become reachable
-  wait_for:
-    host="{{ undercloud_floating_ip }}"
-  delegate_to: localhost
+  local_action:
+    module: wait_for_ssh
+      host="{{ undercloud_floating_ip }}"
+      user=root
 
 - name: Deploy ssh.config.ansible file
   template:
