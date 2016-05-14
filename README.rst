@@ -28,4 +28,4 @@ Usage
 
 #. Run!
 
-   ansible-playbook -i hosts playbooks/deploy.yml -e @ansible-ovb.cfg
+   ansible-playbook -i hosts playbooks/deploy.yaml -e @ansible-ovb.cfg
