@@ -1,0 +1,33 @@
+parameters:
+
+  os_user: {{ username }}
+  os_password: {{ password }}
+  os_tenant: {{ tenant_name }}
+  os_auth_url: {{ auth_url }}
+
+  bmc_flavor: m1.medium
+  bmc_image: CentOS-7.1.1503-x86_64-GenericCloud.qcow2
+  bmc_prefix: {{ prefix | default('ansible-ovb-') }}
+
+  baremetal_flavor: m1.large
+  baremetal_image: empty
+  baremetal_prefix: 'baremetal'
+
+  key_name: {{ key_name }}
+
+  private_net: '{{ prefix | default('ansible-ovb') }}private'
+  public_net: '{{ prefix | default('ansible-ovb') }}public'
+  provision_net: '{{ prefix | default('ansible-ovb') }}provision'
+  external_net: '10.8.184.0/22'
+
+  node_count: 2
+
+  undercloud_name: {{ prefix }}-undercloud
+  undercloud_image: {{ image }}
+  undercloud_flavor: m1.large
+  undercloud_user_data: |
+        #!/bin/sh
+        sed -i "s/no-port-forwarding.*sleep 10\" //" /root/.ssh/authorized_keys
+
+resource_registry:
+  OS::OVB::PrivateNetwork: "{{ inventory_dir }}/heat_templates/private-net-create.yaml"
