@@ -1,0 +1,4 @@
+- name: Deploy TripleO heat stack on existing OpenStack cloud
+  hosts: localhost
+  roles:
+    - { role: deploy_stack }

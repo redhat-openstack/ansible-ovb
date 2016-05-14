@@ -29,5 +29,4 @@
 
 - name: set fact for undercloud floating IP address
   set_fact: 
-    floating_ip="{{ stack_deployment.stack.outputs[0].output_value }}"
-
+    undercloud_floating_ip="{{ stack_deployment.stack.outputs[0].output_value }}"

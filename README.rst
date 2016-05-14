@@ -11,7 +11,10 @@ All the packages needed for running ansible-ovb are listed in requirements.txt
 To install them, run ``pip install -r requirements.txt``
 
 Usage
-^^^^^
+-----
+
+Deploy TripleO stack
+^^^^^^^^^^^^^^^^^^^^
 
 #. Edit ansible-ovb.cfg with your cloud details and custom deployment parameters::
 
@@ -29,3 +32,10 @@ Usage
 #. Run!::
 
        ansible-playbook -i hosts playbooks/deploy.yaml -e @ansible-ovb.cfg
+
+Cleanup existing TripleO stack
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Use the following command to remove existing stack::
+
+       ansible-playbook -i hosts playbooks/cleanup.yaml -e @ansible-ovb.cfg
