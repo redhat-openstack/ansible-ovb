@@ -1,0 +1,13 @@
+Host undercloud-root
+    Hostname {{ undercloud_floating_ip }}
+    IdentityFile {{ key_name }}
+    IdentitiesOnly yes 
+    User root
+    StrictHostKeyChecking no
+
+Host undercloud
+    Hostname {{ undercloud_floating_ip }}
+    IdentityFile {{ key_name }}
+    IdentitiesOnly yes 
+    User stack
+    StrictHostKeyChecking no

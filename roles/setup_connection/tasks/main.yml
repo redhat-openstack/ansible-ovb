@@ -1,0 +1,22 @@
+# This role used for setting up the needed configuration to connect the stack resources, such as the undercloud.
+
+- name: Add undercloud to in-memory inventory
+  add_host:
+    name="undercloud"
+    hostname="{{ undercloud_floating_ip }}"
+    groups="undercloud, tester"
+    ansible_ssh_host="{{ undercloud_floating_ip }}"
+    ansible_fqdn="{{ undercloud_floating_ip }}"
+    ansible_ssh_user=stack
+    ansible_ssh_private_key_file="{{ key_name }}"
+
+- name: Wait for undercloud to become reachable
+  wait_for:
+    host="{{ undercloud_floating_ip }}"
+  delegate_to: localhost
+
+- name: Deploy ssh.config.ansible file
+  template:
+    src=ssh_config.j2
+    dest="{{ inventory_dir }}/ssh.config.ansible"
+    mode=0755

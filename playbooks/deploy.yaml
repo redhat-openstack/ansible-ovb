@@ -2,3 +2,4 @@
   hosts: localhost
   roles:
     - { role: deploy_stack }
+    - { role: setup_connection }
