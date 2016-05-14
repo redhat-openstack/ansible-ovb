@@ -1,0 +1,54 @@
+heat_template_version: 2014-10-16
+
+# This file taken from: https://raw.githubusercontent.com/cybertron/openstack-virtual-baremetal/master/templates/virtual-baremetal-servers.yaml
+
+parameters:
+
+  baremetal_flavor:
+    type: string
+
+  baremetal_image:
+    type: string
+
+  key_name:
+    type: string
+
+  baremetal_prefix:
+    type: string
+
+  provision_net:
+    type: string
+
+  public_net:
+    type: string
+
+  suffix:
+    type: string
+
+resources:
+
+  baremetal_ports:
+    type: OS::OVB::BaremetalPorts
+    properties:
+      suffix: {get_param: suffix}
+      baremetal_prefix: {get_param: baremetal_prefix}
+      provision_net: {get_param: provision_net}
+      public_net: {get_param: public_net}
+
+  baremetal_server:
+    type: OS::Nova::Server
+    properties:
+      flavor: {get_param: baremetal_flavor}
+      image: {get_param: baremetal_image}
+      config_drive: false
+      key_name: {get_param: key_name}
+      networks: {get_attr: [baremetal_ports, ports]}
+      name:
+        list_join:
+        - ''
+        - - {get_param: baremetal_prefix}
+          - {get_param: suffix}
+
+outputs:
+  bmc_nic:
+    value: {port: {get_resource: bmc_port}}

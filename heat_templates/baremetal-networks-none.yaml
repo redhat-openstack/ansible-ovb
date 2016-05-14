@@ -1,0 +1,7 @@
+heat_template_version: 2014-10-16
+
+# This file taken from: https://raw.githubusercontent.com/cybertron/openstack-virtual-baremetal/master/templates/baremetal-networks-none.yaml
+
+outputs:
+  networks:
+    value: {}
