@@ -1,7 +1,7 @@
 Ansible-OVB
 ===========================
 
-Ansible role for deploying TripleO heat stack on existing OpenStack cloud using ``OpenStack Virtual Baremetal`` project
+Ansible roles for deploying TripleO heat stack on existing OpenStack cloud using ``OpenStack Virtual Baremetal`` project
 
 Requirments
 -----------

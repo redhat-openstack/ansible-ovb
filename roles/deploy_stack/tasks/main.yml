@@ -30,3 +30,11 @@
 - name: set fact for undercloud floating IP address
   set_fact: 
     undercloud_floating_ip="{{ stack_deployment.stack.outputs[0].output_value }}"
+
+- name: Create instackenv.json
+  shell: >
+    export OS_USERNAME="{{ username }}";
+    export OS_PASSWORD="{{ password }}";
+    export OS_TENANT_NAME="{{ tenant_name }}";
+    export OS_AUTH_URL="{{ auth_url }}";
+    {{ inventory_dir }}/files/build-nodes-json --env {{ inventory_dir }}/files/stack_parameters

@@ -4,7 +4,7 @@
   add_host:
     name="undercloud"
     hostname="{{ undercloud_floating_ip }}"
-    groups="undercloud, tester"
+    groups="all,undercloud,tester"
     ansible_ssh_host="{{ undercloud_floating_ip }}"
     ansible_fqdn="{{ undercloud_floating_ip }}"
     ansible_ssh_user=stack
@@ -21,3 +21,8 @@
     src=ssh_config.j2
     dest="{{ inventory_dir }}/ssh.config.ansible"
     mode=0755
+
+- name: Deploy inventory file
+  template:
+    src=inventory.j2
+    dest="{{ inventory_dir }}/{{ prefix }}hosts"
