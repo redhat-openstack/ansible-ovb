@@ -10,3 +10,12 @@
   with_items:
     - 'eth1'
     - 'eth2'
+
+- name: Copy keys to undercloud
+  copy:
+      src: "{{ lookup('env','HOME') }}/.ssh/{{ item }}"
+      dest: "/root/.ssh/{{ item }}"
+      mode: 0600
+  with_items:
+      - id_rsa
+      - id_rsa.pub
