@@ -15,9 +15,9 @@ parameters:
 
   key_name: {{ key_name }}
 
-  private_net: '{{ prefix | default('ansible-ovb') }}private'
-  public_net: '{{ prefix | default('ansible-ovb') }}public'
-  provision_net: '{{ prefix | default('ansible-ovb') }}provision'
+  private_net: '{{ prefix | default('ansible-ovb') }}-private'
+  public_net: '{{ prefix | default('ansible-ovb') }}-public'
+  provision_net: '{{ prefix | default('ansible-ovb') }}-provision'
   external_net: '10.8.184.0/22'
 
   node_count: 2

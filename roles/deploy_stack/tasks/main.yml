@@ -5,7 +5,7 @@
 
 - name: Deploy stack
   heat_stack:
-    stack_name: "{{ prefix }}stack"
+    stack_name: "{{ prefix }}-stack"
     state: present
     login_username: "{{ username }}"
     login_password: "{{ password }}"
@@ -24,7 +24,7 @@
     export OS_PASSWORD="{{ password }}";
     export OS_TENANT_NAME="{{ tenant_name }}";
     export OS_AUTH_URL="{{ auth_url }}";
-    heat stack-show "{{ prefix }}stack"
+    heat stack-show "{{ prefix }}-stack"
   when: stack_deployment.result is not defined
 
 - name: set fact for undercloud floating IP address

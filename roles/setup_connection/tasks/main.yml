@@ -25,4 +25,4 @@
 - name: Deploy inventory file
   template:
     src=inventory.j2
-    dest="{{ inventory_dir }}/{{ prefix }}hosts"
+    dest="{{ inventory_dir }}/{{ prefix }}-hosts"
