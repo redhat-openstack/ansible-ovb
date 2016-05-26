@@ -10,7 +10,7 @@ parameters:
   bmc_prefix: {{ prefix | default('ansible-ovb-') }}
 
   baremetal_flavor: m1.large
-  baremetal_image: empty
+  baremetal_image: ipxe-boot
   baremetal_prefix: 'baremetal'
 
   key_name: {{ key_name }}
