@@ -78,10 +78,6 @@ class OpenStackBmc(bmc.Bmc):
 
     def set_boot_device(self, bootdevice):
         server = self.novaclient.servers.get(self.instance)
-        if bootdevice == 'network':
-            self.novaclient.servers.set_meta_item(server, 'libvirt:pxe-first', '1')
-        else:
-            self.novaclient.servers.set_meta_item(server, 'libvirt:pxe-first', '')
         self.log('Set boot device to', bootdevice)
 
     def cold_reset(self):
