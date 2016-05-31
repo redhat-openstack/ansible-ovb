@@ -1,5 +1,5 @@
 Ansible-OVB
-===========================
+===========
 
 Ansible roles for deploying TripleO heat stack on existing OpenStack cloud using ``OpenStack Virtual Baremetal`` project
 
@@ -8,7 +8,7 @@ Requirments
 
 All the packages needed for running ansible-ovb are listed in requirements.txt
 
-To install them, run ``pip install -r requirements.txt``
+To install the packages, run ``pip install -r requirements.txt``
 
 Usage
 -----
@@ -20,21 +20,22 @@ Deploy TripleO stack
 
        vi ansible-ovb.cfg
 
-       username: my_username
-       password: 123456
-       tenant_name: my_project/tenant_name
-       auth_url: http://X.X.X.X:5000/v2.0
-       key_name: keypair_name
-       prefix: test-
-       image: rhel-guest-image-7.2-20151102.0
-       flavor: m1.large
+       username: <cloud_username>
+       password: <user_password>
+       tenant_name: <project_name>
+       auth_url: <cloud_auth_url> # For example http://190.20.42.60:5000/v2.0
+       key_name: <keypair_name>
+       key_file: <key_file_path>
+       prefix: <resources_prefix>
+       image: <image for bm nodes> # For example rhel-guest-image-7.2-20151102.0
+       flavor: <nodes flavor> # For example m1.large
 
-#. Run!::
+#. Deploy OVB-based TripleO setup::
 
        ansible-playbook -i hosts playbooks/deploy.yaml -e @ansible-ovb.cfg
 
-Cleanup existing TripleO stack
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Cleanup TripleO stack
+^^^^^^^^^^^^^^^^^^^^^
 
 #. Use the following command to remove existing stack::
 
