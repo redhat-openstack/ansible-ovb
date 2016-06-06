@@ -20,7 +20,7 @@ parameters:
   provision_net: '{{ prefix | default('ansible-ovb') }}-provision'
   external_net: '10.8.184.0/22'
 
-  node_count: 2
+  node_count: {{ overcloud_nodes_count | default('2') }}
 
   undercloud_name: {{ prefix }}-undercloud
   undercloud_image: {{ image }}
