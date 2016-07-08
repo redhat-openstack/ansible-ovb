@@ -24,7 +24,7 @@ parameters:
 
   undercloud_name: {{ prefix }}-undercloud
   undercloud_image: {{ image }}
-  undercloud_flavor: m1.large
+  undercloud_flavor: m1.xlarge
   undercloud_user_data: |
         #!/bin/sh
         sed -i "s/no-port-forwarding.*sleep 10\" //" /root/.ssh/authorized_keys
