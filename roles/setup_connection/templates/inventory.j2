@@ -5,16 +5,10 @@
 {% elif hostvars[host]['ansible_ssh_private_key_file'] is defined %}
 {{ host }} ansible_ssh_host={{ hostvars[host]['ansible_ssh_host'] }} ansible_ssh_user={{ hostvars[host]['ansible_ssh_user'] }} ansible_ssh_private_key_file={{ hostvars[host]['ansible_ssh_private_key_file'] }}
 
-{%- if hostvars[inventory_hostname]['ansible_python_interpreter'] is defined %}
- ansible_python_interpreter={{ hostvars[inventory_hostname]['ansible_python_interpreter'] }}
-{% endif %}
 
 {% elif hostvars[host]['ansible_ssh_host'] is defined %}
 {{ host }} ansible_ssh_host={{ hostvars[host]['ansible_ssh_host'] | default(omit) }} ansible_ssh_user={{ hostvars[host]['ansible_ssh_user'] | default(omit) }} ansible_ssh_password={{ hostvars[host]['ansible_ssh_password'] | default(omit) }}
 
-{%- if hostvars[inventory_hostname]['ansible_python_interpreter'] is defined %}
- ansible_python_interpreter={{ hostvars[inventory_hostname]['ansible_python_interpreter'] }}
-{% endif %}
 
 {% endif %}
 {% endfor %}
