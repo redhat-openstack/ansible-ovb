@@ -9,7 +9,7 @@ parameters:
   bmc_image: CentOS-7-x86_64-GenericCloud-1608.qcow2
   bmc_prefix: 'bmc-{{ prefix }}'
 
-  baremetal_flavor: m1.large
+  baremetal_flavor: {{ bm_flavor }}
   baremetal_image: ipxe-boot
   baremetal_prefix: '{{ prefix }}-bm'
 
@@ -24,7 +24,7 @@ parameters:
 
   undercloud_name: {{ prefix }}-undercloud
   undercloud_image: {{ image }}
-  undercloud_flavor: m1.xlarge
+  undercloud_flavor: {{ undercloud_flavor }}
   undercloud_user_data: |
         #!/bin/sh
         sed -i "s/no-port-forwarding.*sleep 10\" //" /root/.ssh/authorized_keys
