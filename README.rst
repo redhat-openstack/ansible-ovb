@@ -16,9 +16,9 @@ Usage
 Deploy TripleO stack
 ^^^^^^^^^^^^^^^^^^^^
 
-#. Edit ansible-ovb.cfg with your cloud details and custom deployment parameters::
+#. Edit ansible-ovb.yml with your cloud details and custom deployment parameters::
 
-       vi ansible-ovb.cfg
+       vi ansible-ovb.yml
 
        username: <cloud_username>
        password: <user_password>
@@ -34,11 +34,11 @@ Deploy TripleO stack
 
 #. Deploy OVB-based TripleO setup::
 
-       ansible-playbook -i hosts playbooks/deploy.yaml -e @ansible-ovb.cfg
+       ansible-playbook -i hosts playbooks/deploy.yaml -e @ansible-ovb.yml
 
 Cleanup TripleO stack
 ^^^^^^^^^^^^^^^^^^^^^
 
 #. Use the following command to remove existing stack::
 
-       ansible-playbook -i hosts playbooks/cleanup.yaml -e @ansible-ovb.cfg
+       ansible-playbook -i hosts playbooks/cleanup.yaml -e @ansible-ovb.yml
