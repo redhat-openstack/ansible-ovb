@@ -1,9 +1,17 @@
+- name: Install ansible heat_stack plugin requirements
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-heatclient
+    - python-keystoneclient
+
 - name: Remove stack
   heat_stack:
     stack_name: "{{ prefix }}-stack"
     state: absent
-    login_username: "{{ username }}" 
-    login_password: "{{ password }}" 
-    auth_url: "{{ auth_url }}" 
-    tenant_name: "{{ tenant_name }}" 
+    login_username: "{{ username }}"
+    login_password: "{{ password }}"
+    auth_url: "{{ auth_url }}"
+    tenant_name: "{{ tenant_name }}"
   ignore_errors: true
