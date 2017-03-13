@@ -31,3 +31,9 @@ parameters:
 
 resource_registry:
   OS::OVB::PrivateNetwork: "{{ inventory_dir }}/heat_templates/private-net-create.yaml"
+
+parameter_defaults:
+  overcloud_internal_net: '{{ prefix }}overcloud_internal_net'
+  overcloud_storage_net: '{{ prefix }}overcloud_storage_net'
+  overcloud_storage_mgmt_net: '{{ prefix }}overcloud_storage_mgmt_net'
+  overcloud_tenant_net: '{{ prefix }}overcloud_tenant_net'

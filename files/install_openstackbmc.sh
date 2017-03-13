@@ -1,12 +1,39 @@
 #!/bin/bash
-# This file taken from: https://raw.githubusercontent.com/cybertron/openstack-virtual-baremetal/master/bin/install_openstackbmc.sh
 set -x
 
-yum -y update centos-release # required for rdo-release install to work
-yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum install -y https://rdo.fedorapeople.org/rdo-release.rpm
-yum install -y python-pip python-crypto os-net-config python-novaclient python-neutronclient git jq
-pip install pyghmi
+# Also python-crypto, but that requires special handling because we used to
+# install python2-crypto from EPEL
+# python-[nova|neutron]client are in a similar situation.  They were renamed
+# in RDO to python2-*
+required_packages="python-pip os-net-config git jq"
+
+function have_packages() {
+    for i in $required_packages; do
+        if ! rpm -qa | grep -q $i; then
+            return 1
+        fi
+    done
+    if ! (rpm -qa | egrep -q "python-crypto|python2-crypto"); then
+        return 1
+    fi
+    if ! (rpm -qa | egrep -q "python-novaclient|python2-novaclient"); then
+        return 1
+    fi
+    if ! (rpm -qa | egrep -q "python-neutronclient|python2-neutronclient"); then
+        return 1
+    fi
+    if ! pip freeze | grep -q pyghmi; then
+        return 1
+    fi
+    return 0
+}
+
+if ! have_packages; then
+    yum -y update centos-release # required for rdo-release install to work
+    yum install -y https://rdo.fedorapeople.org/rdo-release.rpm
+    yum install -y $required_packages python-crypto python2-novaclient python2-neutronclient
+    pip install pyghmi
+fi
 
 cat <<EOF >/usr/local/bin/openstackbmc
 $openstackbmc_script
@@ -17,7 +44,17 @@ export OS_USERNAME=$os_user
 export OS_TENANT_NAME=$os_tenant
 export OS_PASSWORD=$os_password
 export OS_AUTH_URL=$os_auth_url
-private_subnet=$(neutron net-show -f value -c subnets $private_net)
+export OS_PROJECT_NAME=$os_project
+export OS_USER_DOMAIN_ID=$os__user_domain
+export OS_PROJECT_DOMAIN_ID=$os__project_domain
+# v3 env vars mess up v2 auth
+[ -z $OS_PROJECT_NAME ] && unset OS_PROJECT_NAME
+[ -z $OS_USER_DOMAIN_ID ] && unset OS_USER_DOMAIN_ID
+[ -z $OS_PROJECT_DOMAIN_ID ] && unset OS_PROJECT_DOMAIN_ID
+# At some point neutronclient started returning a python list repr from this
+# command instead of just the value.  This sed will strip off the bits we
+# don't care about without messing up the output from older clients.
+private_subnet=$(neutron net-show -f value -c subnets $private_net | sed "s/\[u'\(.*\)'\]/\1/")
 default_gw=$(neutron subnet-show $private_subnet -f value -c gateway_ip)
 prefix_len=$(neutron subnet-show -f value -c cidr $private_subnet | awk -F / '{print $2}')
 
@@ -57,6 +94,11 @@ do
     bm_instance=$(neutron port-show $bm_port -c device_id -f value)
     bmc_port="$bmc_prefix_$(($i-1))"
     bmc_ip=$(neutron port-show $bmc_port -c fixed_ips -f value | jq -r .ip_address)
+    # Newer neutronclient requires explicit json output and a slightly
+    # different jq query
+    if [ -z "$bmc_ip" ]; then
+        bmc_ip=$(neutron port-show $bmc_port -c fixed_ips -f json | jq -r .fixed_ips[0].ip_address)
+    fi
     unit="openstack-bmc-$bm_port.service"
 
     cat <<EOF >/usr/lib/systemd/system/$unit
@@ -66,7 +108,8 @@ Requires=config-bmc-ips.service
 After=config-bmc-ips.service
 
 [Service]
-ExecStart=/usr/local/bin/openstackbmc  --os-user $os_user --os-password $os_password --os-tenant $os_tenant --os-auth-url $os_auth_url --instance $bm_instance --address $bmc_ip
+ExecStart=/usr/local/bin/openstackbmc  --os-user $os_user --os-password $os_password --os-tenant "$os_tenant" --os-auth-url $os_auth_url --os-project "$os_project" --os-user-domain "$os_user_domain" --os-project-domain "$os_project_domain" --instance $bm_instance --address $bmc_ip
+Restart=always
 
 User=root
 StandardOutput=kmsg+console
@@ -91,3 +134,4 @@ do
     systemctl start $unit
     systemctl status $unit
 done
+

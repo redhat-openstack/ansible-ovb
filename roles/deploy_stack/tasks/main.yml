@@ -1,18 +1,30 @@
+- name: Install ansible heat_stack plugin requirements
+  become: yes
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-heatclient
+    - python-keystoneclient
+    - python-novaclient
+    - python-neutronclient
+    - os-client-config
+    - pyghmi
+    - shade
+    - PyYAML
+
 - name: Deploy stack parameters template
   template:
     src=stack_parameters.j2
     dest="{{ inventory_dir }}/files/stack_parameters"
 
 - name: Deploy stack
-  heat_stack:
-    stack_name: "{{ prefix }}-stack"
+  os_stack:
+    name: "{{ prefix }}-stack"
     state: present
-    login_username: "{{ username }}"
-    login_password: "{{ password }}"
-    auth_url: "{{ auth_url }}"
-    tenant_name: "{{ tenant_name }}"
+    cloud: "{{ cloud_name }}"
     template: "{{ inventory_dir}}/heat_templates/ovb.yaml"
-    environment_files: 
+    environment: 
       - "{{ inventory_dir }}/heat_templates/resource-registry.yaml"
       -  "{{ inventory_dir }}/files/stack_parameters"
   register: stack_deployment
