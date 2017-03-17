@@ -49,4 +49,5 @@
     export OS_PASSWORD="{{ password }}";
     export OS_TENANT_NAME="{{ tenant_name }}";
     export OS_AUTH_URL="{{ auth_url }}";
+    export OS_CLOUD="{{ cloud_name }}";
     {{ inventory_dir }}/files/build-nodes-json --env {{ inventory_dir }}/files/stack_parameters
