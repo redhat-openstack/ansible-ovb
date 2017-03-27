@@ -16,17 +16,17 @@
 - name: Deploy stack parameters template
   template:
     src=stack_parameters.j2
-    dest="{{ inventory_dir }}/files/stack_parameters"
+    dest="{{ inventory_dir | default('.') }}/files/stack_parameters"
 
 - name: Deploy stack
   os_stack:
     name: "{{ prefix }}-stack"
     state: present
     cloud: "{{ cloud_name }}"
-    template: "{{ inventory_dir}}/heat_templates/ovb.yaml"
-    environment: 
-      - "{{ inventory_dir }}/heat_templates/resource-registry.yaml"
-      -  "{{ inventory_dir }}/files/stack_parameters"
+    template: "{{ inventory_dir | default('.') }}/heat_templates/ovb.yaml"
+    environment:
+      - "{{ inventory_dir | default('.') }}/heat_templates/resource-registry.yaml"
+      -  "{{ inventory_dir | default('.') }}/files/stack_parameters"
   register: stack_deployment
   ignore_errors: true
 
@@ -40,7 +40,7 @@
   when: stack_deployment.result is not defined
 
 - name: set fact for undercloud floating IP address
-  set_fact: 
+  set_fact:
     undercloud_floating_ip="{{ stack_deployment.stack.outputs[0].output_value }}"
 
 - name: Create instackenv.json
@@ -50,4 +50,4 @@
     export OS_TENANT_NAME="{{ tenant_name }}";
     export OS_AUTH_URL="{{ auth_url }}";
     export OS_CLOUD="{{ cloud_name }}";
-    {{ inventory_dir }}/files/build-nodes-json --env {{ inventory_dir }}/files/stack_parameters
+    {{ inventory_dir | default('.') }}/files/build-nodes-json --env {{ inventory_dir | default('.') }}/files/stack_parameters

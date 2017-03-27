@@ -30,7 +30,7 @@ parameters:
         sed -i "s/no-port-forwarding.*sleep 10\" //" /root/.ssh/authorized_keys
 
 resource_registry:
-  OS::OVB::PrivateNetwork: "{{ inventory_dir }}/heat_templates/private-net-create.yaml"
+  OS::OVB::PrivateNetwork: "{{ inventory_dir | default('.') }}/heat_templates/private-net-create.yaml"
 
 parameter_defaults:
   overcloud_internal_net: '{{ prefix }}overcloud_internal_net'

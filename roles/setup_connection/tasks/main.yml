@@ -19,10 +19,10 @@
 - name: Deploy ssh.config.ansible file
   template:
     src=ssh_config.j2
-    dest="{{ inventory_dir }}/ssh.config.ansible"
+    dest="{{ inventory_dir | default('.') }}/ssh.config.ansible"
     mode=0755
 
 - name: Deploy inventory file
   template:
     src=inventory.j2
-    dest="{{ inventory_dir }}/{{ prefix }}-hosts"
+    dest="{{ inventory_dir | default('.') }}/{{ prefix }}-hosts"
