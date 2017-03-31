@@ -26,9 +26,8 @@
     template: "{{ inventory_dir | default('.') }}/heat_templates/ovb.yaml"
     environment:
       - "{{ inventory_dir | default('.') }}/heat_templates/resource-registry.yaml"
-      -  "{{ inventory_dir | default('.') }}/files/stack_parameters"
+      - "{{ inventory_dir | default('.') }}/files/stack_parameters"
   register: stack_deployment
-  ignore_errors: true
 
 - name: Show stack deployment information
   shell: >
