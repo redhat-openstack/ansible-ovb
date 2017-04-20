@@ -1,4 +1,4 @@
-ansible>=2.1
+ansible>=2.3.0 # needed for os_stack module
 python-heatclient
 jinja2
 oslo.utils
